@@ -71,8 +71,8 @@ beforeEach(function () {
 
     if (file_exists($this->distDirectory)) {
         exec(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'
-            ? 'del '.$this->distDirectory.' /q'
-            : 'rm -r '.$this->distDirectory);
+            ? 'rmdir "'.$this->distDirectory.'" /s /q'
+            : 'rm -r "'.$this->distDirectory.'"');
     }
 
     Route::get('/', function () {
@@ -133,4 +133,46 @@ it('exports included files', function () {
     assertFileExists(__DIR__.'/dist/media/image.png');
 
     expect(file_exists(__DIR__.'/dist/index.php'))->toBeFalse();
+});
+
+it('exports paths with query parameters', function () {
+    // Set up a simple route with query parameters
+    Route::get('test-categories', function () {
+        $page = request('page', 1);
+        return "Test Categories page {$page}";
+    });
+
+    // Also set up the default routes that afterEach expects
+    Route::get('/', function () {
+        return HOME_CONTENT;
+    });
+    Route::get('about', function () {
+        return ABOUT_CONTENT;
+    });
+    Route::get('feed/blog.atom', function () {
+        return FEED_CONTENT;
+    });
+    Route::redirect('redirect', 'https://spatie.be');
+
+    app(Exporter::class)
+        ->crawl(false)
+        ->paths([
+            '/',                      // Required by afterEach
+            '/about',                 // Required by afterEach
+            '/feed/blog.atom',        // Required by afterEach
+            '/redirect',              // Required by afterEach
+            '/test-categories?page=1',
+            '/test-categories?page=2',
+        ])
+        ->export();
+
+    // Check if files are created with URL-encoded names
+    $expectedPath1 = __DIR__.'/dist/test-categories%3Fpage%3D1/index.html';
+    $expectedPath2 = __DIR__.'/dist/test-categories%3Fpage%3D2/index.html';
+    expect(file_exists($expectedPath1))->toBeTrue("Expected file not found: {$expectedPath1}");
+    expect(file_exists($expectedPath2))->toBeTrue("Expected file not found: {$expectedPath2}");
+    // dd($expectedPath1, $expectedPath2);
+    // Verify content is correct
+    expect(file_get_contents($expectedPath1))->toBe('Test Categories page 1');
+    expect(file_get_contents($expectedPath2))->toBe('Test Categories page 2');
 });
