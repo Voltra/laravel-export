@@ -20,11 +20,16 @@ trait NormalizedPath
 
     protected function sanitizePathForFilesystem(string $path): string
     {
-        // Characters that are problematic in filesystem paths
+        // If there's a query string, convert it into a subdirectory
+        if (strpos($path, '?') !== false) {
+            $parts = explode('?', $path, 2);
+            $basePath = $parts[0];
+            $query = $parts[1];
+            // Do not encode '=' or '&', just append as subdirectory
+            $path = rtrim($basePath, '/') . '/' . $query;
+        }
+        // Encode other problematic characters except '=' and '&' in the query string
         $problematicChars = [
-            '?' => '%3F',
-            '=' => '%3D',
-            '&' => '%26',
             ':' => '%3A',
             '<' => '%3C',
             '>' => '%3E',
@@ -33,7 +38,6 @@ trait NormalizedPath
             '*' => '%2A',
             // Don't encode forward slashes as they're path separators
         ];
-
         return str_replace(array_keys($problematicChars), array_values($problematicChars), $path);
     }
 }

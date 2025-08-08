@@ -154,25 +154,29 @@ it('exports paths with query parameters', function () {
     });
     Route::redirect('redirect', 'https://spatie.be');
 
+    $paths = [
+        '/',                      // Required by afterEach
+        '/about',                 // Required by afterEach
+        '/feed/blog.atom',        // Required by afterEach
+        '/redirect',              // Required by afterEach
+    ];
+
+    // Add test-categories with page query from 1 to 7
+    $maxPage = 7;
+    foreach (range(1, $maxPage) as $page) {
+        $paths[] = "/test-categories?page={$page}";
+    }
+
     app(Exporter::class)
         ->crawl(false)
-        ->paths([
-            '/',                      // Required by afterEach
-            '/about',                 // Required by afterEach
-            '/feed/blog.atom',        // Required by afterEach
-            '/redirect',              // Required by afterEach
-            '/test-categories?page=1',
-            '/test-categories?page=2',
-        ])
+        ->paths($paths)
         ->export();
 
-    // Check if files are created with URL-encoded names
-    $expectedPath1 = __DIR__.'/dist/test-categories%3Fpage%3D1/index.html';
-    $expectedPath2 = __DIR__.'/dist/test-categories%3Fpage%3D2/index.html';
-    expect(file_exists($expectedPath1))->toBeTrue("Expected file not found: {$expectedPath1}");
-    expect(file_exists($expectedPath2))->toBeTrue("Expected file not found: {$expectedPath2}");
-    // dd($expectedPath1, $expectedPath2);
-    // Verify content is correct
-    expect(file_get_contents($expectedPath1))->toBe('Test Categories page 1');
-    expect(file_get_contents($expectedPath2))->toBe('Test Categories page 2');
+    // Check if files are created and content is correct for each page
+    foreach (range(1, $maxPage) as $page) {
+        $expectedPath = __DIR__."/dist/test-categories/page={$page}/index.html";
+        expect(file_exists($expectedPath))->toBeTrue("Expected file not found: {$expectedPath}");
+        expect(file_get_contents($expectedPath))->toBe("Test Categories page {$page}");
+    }
 });
+
