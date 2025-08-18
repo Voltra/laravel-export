@@ -71,8 +71,8 @@ beforeEach(function () {
 
     if (file_exists($this->distDirectory)) {
         exec(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'
-            ? 'del '.$this->distDirectory.' /q'
-            : 'rm -r '.$this->distDirectory);
+            ? 'rmdir "'.$this->distDirectory.'" /s /q'
+            : 'rm -r "'.$this->distDirectory.'"');
     }
 
     Route::get('/', function () {
@@ -134,3 +134,49 @@ it('exports included files', function () {
 
     expect(file_exists(__DIR__.'/dist/index.php'))->toBeFalse();
 });
+
+it('exports paths with query parameters', function () {
+    // Set up a simple route with query parameters
+    Route::get('test-categories', function () {
+        $page = request('page', 1);
+        return "Test Categories page {$page}";
+    });
+
+    // Also set up the default routes that afterEach expects
+    Route::get('/', function () {
+        return HOME_CONTENT;
+    });
+    Route::get('about', function () {
+        return ABOUT_CONTENT;
+    });
+    Route::get('feed/blog.atom', function () {
+        return FEED_CONTENT;
+    });
+    Route::redirect('redirect', 'https://spatie.be');
+
+    $paths = [
+        '/',                      // Required by afterEach
+        '/about',                 // Required by afterEach
+        '/feed/blog.atom',        // Required by afterEach
+        '/redirect',              // Required by afterEach
+    ];
+
+    // Add test-categories with page query from 1 to 7
+    $maxPage = 7;
+    foreach (range(1, $maxPage) as $page) {
+        $paths[] = "/test-categories?page={$page}";
+    }
+
+    app(Exporter::class)
+        ->crawl(false)
+        ->paths($paths)
+        ->export();
+
+    // Check if files are created and content is correct for each page
+    foreach (range(1, $maxPage) as $page) {
+        $expectedPath = __DIR__."/dist/test-categories/page={$page}/index.html";
+        expect(file_exists($expectedPath))->toBeTrue("Expected file not found: {$expectedPath}");
+        expect(file_get_contents($expectedPath))->toBe("Test Categories page {$page}");
+    }
+});
+
