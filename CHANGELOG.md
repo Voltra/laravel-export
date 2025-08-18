@@ -2,6 +2,23 @@
 
 All notable changes to `laravel-export` will be documented in this file
 
+## 1.2.1 - 2025-08-18
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.3.0 to 2.4.0 by @dependabot[bot] in https://github.com/spatie/laravel-export/pull/134
+* Bump aglipanci/laravel-pint-action from 2.5 to 2.6 by @dependabot[bot] in https://github.com/spatie/laravel-export/pull/136
+* Bump stefanzweifel/git-auto-commit-action from 5 to 6 by @dependabot[bot] in https://github.com/spatie/laravel-export/pull/135
+* Bump actions/checkout from 3 to 5 by @dependabot[bot] in https://github.com/spatie/laravel-export/pull/139
+* Fix cross-platform test compatibility and ignore PHPUnit cache by @AMoktar in https://github.com/spatie/laravel-export/pull/137
+* Add URL encoding support for filesystem paths with query parameters by @AMoktar in https://github.com/spatie/laravel-export/pull/138
+
+### New Contributors
+
+* @AMoktar made their first contribution in https://github.com/spatie/laravel-export/pull/137
+
+**Full Changelog**: https://github.com/spatie/laravel-export/compare/1.2.0...1.2.1
+
 ## 1.2.0 - 2025-03-08
 
 ### What's Changed
