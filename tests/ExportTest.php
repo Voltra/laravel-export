@@ -139,6 +139,7 @@ it('exports paths with query parameters', function () {
     // Set up a simple route with query parameters
     Route::get('test-categories', function () {
         $page = request('page', 1);
+
         return "Test Categories page {$page}";
     });
 
@@ -179,4 +180,3 @@ it('exports paths with query parameters', function () {
         expect(file_get_contents($expectedPath))->toBe("Test Categories page {$page}");
     }
 });
-
