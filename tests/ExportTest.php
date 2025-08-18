@@ -55,7 +55,10 @@ function assertRedirectExists(): void
 function assertExportedFile(string $path, string $content): void
 {
     assertFileExists($path);
-    assertEquals($content, file_get_contents($path));
+    // Normalize line endings for cross-platform compatibility
+    $expectedContent = str_replace(["\r\n", "\r"], "\n", $content);
+    $actualContent = str_replace(["\r\n", "\r"], "\n", file_get_contents($path));
+    assertEquals($expectedContent, $actualContent);
 }
 
 function assertRequestsHasHeader(): void
