@@ -19,6 +19,20 @@ A few example use cases for this package:
 
 - Use something like [Nova](https://nova.laravel.com/), [Wink](https://github.com/themsaid/wink), [Filament](https://filamentphp.com/), [Sharp](https://sharp.code16.fr/), or any other admin panel to manage your site locally or on a remote server, then publish it to a service like Netlify. This gives you all benefits of a static site (speed, simple hosting, scalability) while still having a dynamic backend of some sort.
 
+## Why a fork?
+
+> I don't want to maintain this complexity in our package
+
+This is an answer I received to a PR that fixed symlink detection on Windows but also on all other OS. Without that PR, directories like the one symlinked via `php artisan storage:link` were not properly exported.
+
+If you don't count comments and unit tests, the PR was a 10 lines edit (including proper indentation and multiline function calls).
+
+As such `voltra/laravel-export` can be treated as a community-driven fork of `spatie/laravel-export` that won't shy away from bugfixes.
+
+It's even treated as a replacement for that package on a composer level. That means that if you use other packages that depend on `spatie/laravel-export` and you then choose to require `voltra/laravel-export`, then that's what every package will be using.
+
+Such a fork will also allow to slightly diverge from upstream to allow nice QoL features like on-export base URL replacement (WIP).
+
 ## Installation
 
 You can install the package via composer:
