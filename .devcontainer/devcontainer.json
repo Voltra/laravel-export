@@ -1,7 +1,6 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/php:8.2",
-  "features": {
-    "ghcr.io/devcontainers/features/node:1": {},
-    "ghcr.io/cirolosapio/devcontainers-features/alpine-php-xdebug:0": {}
-  }
+    "image": "mcr.microsoft.com/devcontainers/php:8.2",
+    "features": {
+        "ghcr.io/devcontainers/features/node:1": {},
+    }
 }
