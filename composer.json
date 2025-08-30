@@ -1,13 +1,21 @@
 {
-    "name": "spatie/laravel-export",
+    "name": "voltra/laravel-export",
     "description": "Create a static site bundle from a Laravel app",
     "keywords": [
+        "voltra",
         "spatie",
+        "laravel",
         "laravel-export"
     ],
-    "homepage": "https://github.com/spatie/laravel-export",
+    "homepage": "https://github.com/Voltra/laravel-export",
     "license": "MIT",
     "authors": [
+        {
+            "name": "Voltra",
+            "email": "dev@ludwig-guerin.fr",
+            "homepage": "https://github.com/Voltra",
+            "role": "Developer"
+        },
         {
             "name": "Sebastian De Deyne",
             "email": "sebastian@spatie.be",
