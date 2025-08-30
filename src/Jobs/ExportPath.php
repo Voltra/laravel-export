@@ -23,14 +23,21 @@ class ExportPath
 
     public function handle(Kernel $kernel, Destination $destination, UrlGenerator $urlGenerator)
     {
-        $response = $kernel->handle(
-            Request::create($urlGenerator->to($this->path))
-        );
+        $localRequest = Request::create($urlGenerator->to($this->path));
 
-        if ($response->status() !== 200) {
+        $localRequest->headers->set('X-Laravel-Export', 'true');
+
+        $response = $kernel->handle($localRequest);
+
+        if (! $this->isSuccesfullOrRedirect($response->status())) {
             throw new RuntimeException("Path [{$this->path}] returned status code [{$response->status()}]");
         }
 
         $destination->write($this->normalizePath($this->path), $response->content());
+    }
+
+    protected function isSuccesfullOrRedirect(int $status): bool
+    {
+        return in_array($status, [200, 301, 302]);
     }
 }

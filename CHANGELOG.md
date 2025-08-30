@@ -2,6 +2,59 @@
 
 All notable changes to `laravel-export` will be documented in this file
 
+## 1.2.1 - 2025-08-18
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.3.0 to 2.4.0 by @dependabot[bot] in https://github.com/spatie/laravel-export/pull/134
+* Bump aglipanci/laravel-pint-action from 2.5 to 2.6 by @dependabot[bot] in https://github.com/spatie/laravel-export/pull/136
+* Bump stefanzweifel/git-auto-commit-action from 5 to 6 by @dependabot[bot] in https://github.com/spatie/laravel-export/pull/135
+* Bump actions/checkout from 3 to 5 by @dependabot[bot] in https://github.com/spatie/laravel-export/pull/139
+* Fix cross-platform test compatibility and ignore PHPUnit cache by @AMoktar in https://github.com/spatie/laravel-export/pull/137
+* Add URL encoding support for filesystem paths with query parameters by @AMoktar in https://github.com/spatie/laravel-export/pull/138
+
+### New Contributors
+
+* @AMoktar made their first contribution in https://github.com/spatie/laravel-export/pull/137
+
+**Full Changelog**: https://github.com/spatie/laravel-export/compare/1.2.0...1.2.1
+
+## 1.2.0 - 2025-03-08
+
+### What's Changed
+
+* Allow redirects export by @plakhin in https://github.com/spatie/laravel-export/pull/131
+
+### New Contributors
+
+* @plakhin made their first contribution in https://github.com/spatie/laravel-export/pull/131
+
+**Full Changelog**: https://github.com/spatie/laravel-export/compare/1.1.2...1.2.0
+
+## 1.1.2 - 2025-02-20
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 1.6.0 to 2.2.0 by @dependabot in https://github.com/spatie/laravel-export/pull/123
+* Bump dependabot/fetch-metadata from 2.2.0 to 2.3.0 by @dependabot in https://github.com/spatie/laravel-export/pull/126
+* Bump aglipanci/laravel-pint-action from 2.4 to 2.5 by @dependabot in https://github.com/spatie/laravel-export/pull/128
+* Laravel 12.x Compatibility by @laravel-shift in https://github.com/spatie/laravel-export/pull/129
+
+### New Contributors
+
+* @laravel-shift made their first contribution in https://github.com/spatie/laravel-export/pull/129
+
+**Full Changelog**: https://github.com/spatie/laravel-export/compare/1.1.1...1.1.2
+
+## 1.1.1 - 2024-04-16
+
+### What's Changed
+
+* Bump aglipanci/laravel-pint-action from 2.3.1 to 2.4 by @dependabot in https://github.com/spatie/laravel-export/pull/121
+* Add X-Laravel-Export header to request on export path by @aguingand in https://github.com/spatie/laravel-export/pull/120
+
+**Full Changelog**: https://github.com/spatie/laravel-export/compare/1.1.0...1.1.1
+
 ## 1.1.0 - 2024-03-13
 
 ### What's Changed
