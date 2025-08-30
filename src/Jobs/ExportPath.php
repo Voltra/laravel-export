@@ -7,6 +7,7 @@ namespace Spatie\Export\Jobs;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Spatie\Export\Destination;
 use Spatie\Export\Traits\NormalizedPath;
 
@@ -14,13 +15,7 @@ class ExportPath
 {
     use NormalizedPath;
 
-    /** @var string */
-    protected $path;
-
-    public function __construct(string $path)
-    {
-        $this->path = $path;
-    }
+    public function __construct(protected string $path) {}
 
     public function handle(Kernel $kernel, Destination $destination, UrlGenerator $urlGenerator)
     {
@@ -28,6 +23,9 @@ class ExportPath
 
         $localRequest->headers->set('X-Laravel-Export', 'true');
 
+        /**
+         * @var Response $response
+         */
         $response = $kernel->handle($localRequest);
 
         if (! $this->isSuccesfullOrRedirect($response->status())) {

@@ -77,7 +77,10 @@
     },
     "scripts": {
         "format": "@php ./vendor/bin/pint",
-        "refactor": "@php ./vendor/bin/rector",
+        "refactor": [
+            "@php ./vendor/bin/rector",
+            "@format"
+        ],
         "test": "@php ./vendor/bin/pest",
         "test-coverage": "@php ./vendor/bin/pest --coverage-html coverage"
     }

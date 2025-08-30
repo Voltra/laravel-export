@@ -64,11 +64,9 @@ class ExportCommand extends Command
         }
 
         $beforeHooks = collect(config('export.before', []))
-            ->reject(function (string $hook, string $name) {
-                return $this->input->getOption("skip-{$name}");
-            });
+            ->reject(fn (string $hook, string $name) => $this->input->getOption("skip-{$name}"));
 
-        if (! count($beforeHooks)) {
+        if (empty($beforeHooks)) {
             return;
         }
 
@@ -84,11 +82,9 @@ class ExportCommand extends Command
         }
 
         $afterHooks = collect(config('export.after', []))
-            ->reject(function (string $hook, string $name) {
-                return $this->input->getOption("skip-{$name}");
-            });
+            ->reject(fn (string $hook, string $name) => $this->input->getOption("skip-{$name}"));
 
-        if (! count($afterHooks)) {
+        if (empty($afterHooks)) {
             return;
         }
 

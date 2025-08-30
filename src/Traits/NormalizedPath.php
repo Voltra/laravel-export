@@ -13,11 +13,11 @@ trait NormalizedPath
         // Sanitize path for filesystem compatibility
         $path = $this->sanitizePathForFilesystem($path);
 
-        if (! Str::contains(basename($path), '.')) {
+        if (! Str::contains(basename((string) $path), '.')) {
             $path .= '/index.html';
         }
 
-        return ltrim($path, '/');
+        return ltrim((string) $path, '/');
     }
 
     protected function sanitizePathForFilesystem(string $path): string

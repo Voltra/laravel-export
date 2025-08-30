@@ -8,21 +8,12 @@ use Spatie\Export\Destination;
 
 class IncludeFile
 {
-    /** @var string */
-    protected $source;
-
-    /** @var string */
-    protected $target;
-
-    /** @var string[] */
-    protected $excludeFilePatterns;
-
-    public function __construct(string $source, string $target, array $excludeFilePatterns)
-    {
-        $this->source = $source;
-        $this->target = $target;
-        $this->excludeFilePatterns = $excludeFilePatterns;
-    }
+    public function __construct(
+        protected string $source,
+        protected string $target,
+        /** @var string[] */
+        protected array $excludeFilePatterns
+    ) {}
 
     public function handle(Destination $destination)
     {

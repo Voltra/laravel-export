@@ -77,17 +77,11 @@ beforeEach(function () {
             : 'rm -r "'.$this->distDirectory.'"');
     }
 
-    Route::get('/', function () {
-        return HOME_CONTENT;
-    });
+    Route::get('/', fn () => HOME_CONTENT);
 
-    Route::get('about', function () {
-        return ABOUT_CONTENT;
-    });
+    Route::get('about', fn () => ABOUT_CONTENT);
 
-    Route::get('feed/blog.atom', function () {
-        return FEED_CONTENT;
-    });
+    Route::get('feed/blog.atom', fn () => FEED_CONTENT);
 
     Route::redirect('redirect', 'https://spatie.be');
 });
@@ -146,15 +140,9 @@ it('exports paths with query parameters', function () {
     });
 
     // Also set up the default routes that afterEach expects
-    Route::get('/', function () {
-        return HOME_CONTENT;
-    });
-    Route::get('about', function () {
-        return ABOUT_CONTENT;
-    });
-    Route::get('feed/blog.atom', function () {
-        return FEED_CONTENT;
-    });
+    Route::get('/', fn () => HOME_CONTENT);
+    Route::get('about', fn () => ABOUT_CONTENT);
+    Route::get('feed/blog.atom', fn () => FEED_CONTENT);
     Route::redirect('redirect', 'https://spatie.be');
 
     $paths = [

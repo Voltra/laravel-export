@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Spatie\Export;
 
-use Illuminate\Contracts\Bus\Dispatcher;
-use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Str;
 use Spatie\Export\Jobs\CleanDestination;
 use Spatie\Export\Jobs\CrawlSite;
@@ -14,12 +12,6 @@ use Spatie\Export\Jobs\IncludeFile;
 
 class Exporter
 {
-    /** @var \Illuminate\Contracts\Bus\Dispatcher */
-    protected $dispatcher;
-
-    /** @var UrlGenerator */
-    protected $urlGenerator;
-
     /** @var bool */
     protected $cleanBeforeExport = false;
 
@@ -29,17 +21,13 @@ class Exporter
     /** @var string[] */
     protected $paths = [];
 
-    /** @var string[] */
+    /** @var array<string, string> */
     protected $includeFiles = [];
 
     /** @var string[] */
     protected $excludeFilePatterns = [];
 
-    public function __construct(Dispatcher $dispatcher, UrlGenerator $urlGenerator)
-    {
-        $this->dispatcher = $dispatcher;
-        $this->urlGenerator = $urlGenerator;
-    }
+    public function __construct(protected \Illuminate\Contracts\Bus\Dispatcher $dispatcher, protected \Illuminate\Contracts\Routing\UrlGenerator $urlGenerator) {}
 
     public function cleanBeforeExport(bool $cleanBeforeExport): self
     {
@@ -68,13 +56,14 @@ class Exporter
     {
         $urls = is_array($urls[0]) ? $urls[0] : $urls;
 
-        $this->paths(array_map(function (string $url): string {
-            return Str::replaceFirst($this->urlGenerator->to('/'), '', $url);
-        }, $urls));
+        $this->paths(array_map(fn (string $url): string => Str::replaceFirst($this->urlGenerator->to('/'), '', $url), $urls));
 
         return $this;
     }
 
+    /**
+     * @param  array<string, string>  $includeFiles
+     */
     public function includeFiles(array $includeFiles): self
     {
         $this->includeFiles = array_merge($this->includeFiles, $includeFiles);

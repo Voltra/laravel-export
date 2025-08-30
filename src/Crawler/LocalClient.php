@@ -18,8 +18,7 @@ class LocalClient extends Client
     /** @var \Illuminate\Contracts\Http\Kernel */
     protected $kernel;
 
-    /** @var \Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory */
-    protected $psrHttpFactory;
+    protected \Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory $psrHttpFactory;
 
     public function __construct()
     {
