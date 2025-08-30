@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Spatie\Export;
 
 use Illuminate\Contracts\Bus\Dispatcher;

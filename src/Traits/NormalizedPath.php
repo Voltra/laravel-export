@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Spatie\Export\Traits;
 
 use Illuminate\Support\Str;
@@ -21,7 +23,7 @@ trait NormalizedPath
     protected function sanitizePathForFilesystem(string $path): string
     {
         // If there's a query string, convert it into a subdirectory
-        if (strpos($path, '?') !== false) {
+        if (str_contains($path, '?')) {
             $parts = explode('?', $path, 2);
             $basePath = $parts[0];
             $query = $parts[1];

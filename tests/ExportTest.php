@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use Spatie\Export\Exporter;
 
@@ -70,7 +72,7 @@ beforeEach(function () {
     $this->distDirectory = __DIR__.DIRECTORY_SEPARATOR.'dist';
 
     if (file_exists($this->distDirectory)) {
-        exec(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'
+        exec(mb_strtoupper(mb_substr(PHP_OS, 0, 3)) === 'WIN'
             ? 'rmdir "'.$this->distDirectory.'" /s /q'
             : 'rm -r "'.$this->distDirectory.'"');
     }

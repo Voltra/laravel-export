@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Storage;
 use Spatie\Export\Destinations\FilesystemDestination;
 use Spatie\Export\Jobs\IncludeFile;
@@ -11,15 +13,18 @@ use function Pest\Laravel\artisan;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFileExists;
 
-function IF_test_here(string $path = '') {
+function IF_test_here(string $path = '')
+{
     return join_paths(dirname(__DIR__), $path);
 }
 
-function IF_test_dist(string $path = '') {
+function IF_test_dist(string $path = '')
+{
     return join_paths(IF_test_here('dist'), $path);
 }
 
-function IF_test_stubs(string $path = '') {
+function IF_test_stubs(string $path = '')
+{
     return join_paths(IF_test_here('stubs'), $path);
 }
 
@@ -29,11 +34,13 @@ function IF_test_assertExportedFile(string $path, string $content): void
     assertEquals($content, file_get_contents($path));
 }
 
-function IF_test_run_cmd(/*int|Command*/ $cmd): int {
+function IF_test_run_cmd(/* int|Command */ $cmd): int
+{
     return is_object($cmd) ? $cmd->run() : $cmd;
 }
 
-function IF_test_storage_link() {
+function IF_test_storage_link()
+{
     $opts = ['--relative' => false];
 
     $cmd = artisan('storage:link', $opts);
@@ -42,7 +49,8 @@ function IF_test_storage_link() {
     expect($exitCode)->toBe(0);
 }
 
-function IF_test_storage_unlink() {
+function IF_test_storage_unlink()
+{
     $cmd = artisan('storage:unlink');
 
     $exitCode = IF_test_run_cmd($cmd);
@@ -54,7 +62,7 @@ describe(IncludeFile::class, function () {
     // assertions on the symlink that is being inspected
 
     /**
-     * @param callable(SplFileInfo): void $assertions
+     * @param  callable(SplFileInfo): void  $assertions
      */
     $symlinkTest = function (callable $assertions) {
         $config = config();
@@ -94,7 +102,6 @@ describe(IncludeFile::class, function () {
                 'driver' => 'local',
                 'root' => IF_test_dist(),
             ]);
-
 
             // We execute `php artisan storage:link` to create our
             // test symlink object. This has been chosen as it's
@@ -138,17 +145,17 @@ describe(IncludeFile::class, function () {
 
             $exportedSplInfo = collect(
                 Finder::create()
-                ->in(IF_test_dist('public-symlink'))
-                ->files()
+                    ->in(IF_test_dist('public-symlink'))
+                    ->files()
             )->filter(fn ($splInfo) => $splInfo->getBasename() == $fileToCheck)
-            ->first();
+                ->first();
 
             $srcSplInfo = collect(
                 Finder::create()
-                ->in($srcPath)
-                ->files()
+                    ->in($srcPath)
+                    ->files()
             )->filter(fn ($splInfo) => $splInfo->getBasename() == $fileToCheck)
-            ->first();
+                ->first();
 
             // We compare the real paths behind the source and
             // exported file as to ensure that we
@@ -158,12 +165,12 @@ describe(IncludeFile::class, function () {
         } finally {
             $config->set('filesystems.links', $oldConfig['filesystems.links']);
             $config->set('filesystems.disks.laravel_export', $oldConfig['filesystems.disks.laravel_export']);
-        
+
             IF_test_storage_unlink();
         }
     };
 
-    it('properly copies the contents of a Windows-style symlink to a directory', function () use($symlinkTest) {
+    it('properly copies the contents of a Windows-style symlink to a directory', function () use ($symlinkTest) {
         $symlinkTest(function (SplFileInfo $splInfo) {
             // Checking isDir() and isLink() on $item could lead to false negatives due to the way
             // symlinks are handled on Windows, especially if created under Git-For-Windows.
@@ -178,11 +185,11 @@ describe(IncludeFile::class, function () {
         });
     })->onlyOnWindows();
 
-    it('properly copies the contents of a symlink to a directory', function () use($symlinkTest) {
+    it('properly copies the contents of a symlink to a directory', function () use ($symlinkTest) {
         $symlinkTest(function (SplFileInfo $splInfo) {
             // On a UNIX / non-Windows system, a symlink to a directory
             // leads to it being detected both as a directory
-            // and a symlink when using SplFileInfo. 
+            // and a symlink when using SplFileInfo.
 
             expect($splInfo->isDir())->toBeTrue();
             expect($splInfo->isFile())->toBeFalse();

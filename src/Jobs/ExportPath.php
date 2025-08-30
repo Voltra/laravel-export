@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Spatie\Export\Jobs;
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Http\Request;
-use RuntimeException;
 use Spatie\Export\Destination;
 use Spatie\Export\Traits\NormalizedPath;
 
@@ -30,7 +31,7 @@ class ExportPath
         $response = $kernel->handle($localRequest);
 
         if (! $this->isSuccesfullOrRedirect($response->status())) {
-            throw new RuntimeException("Path [{$this->path}] returned status code [{$response->status()}]");
+            throw new \RuntimeException("Path [{$this->path}] returned status code [{$response->status()}]");
         }
 
         $destination->write($this->normalizePath($this->path), $response->content());

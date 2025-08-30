@@ -1,5 +1,7 @@
 # Create a static site bundle from a Laravel app
 
+![voltra/laravel-export](https://raw.githubusercontent.com/Voltra/laravel-export/main/art/voltra__laravel_export.png)
+
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/voltra/laravel-export.svg?style=flat-square)](https://packagist.org/packages/voltra/laravel-export)
 [![Total Downloads](https://img.shields.io/packagist/dt/oltra/laravel-export.svg?style=flat-square)](https://packagist.org/packages/voltra/laravel-export)
 

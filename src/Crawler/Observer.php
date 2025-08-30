@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Spatie\Export\Crawler;
 
 use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
-use RuntimeException;
 use Spatie\Crawler\CrawlObservers\CrawlObserver;
 use Spatie\Export\Destination;
 use Spatie\Export\Traits\NormalizedPath;
@@ -30,10 +31,10 @@ class Observer extends CrawlObserver
     {
         if (! $this->isSuccesfullOrRedirect($response->getStatusCode())) {
             if (! empty($foundOnUrl)) {
-                throw new RuntimeException("URL [{$url}] found on [{$foundOnUrl}] returned status code [{$response->getStatusCode()}]");
+                throw new \RuntimeException("URL [{$url}] found on [{$foundOnUrl}] returned status code [{$response->getStatusCode()}]");
             }
 
-            throw new RuntimeException("URL [{$url}] returned status code [{$response->getStatusCode()}]");
+            throw new \RuntimeException("URL [{$url}] returned status code [{$response->getStatusCode()}]");
         }
 
         $this->destination->write(

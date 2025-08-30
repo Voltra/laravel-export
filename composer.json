@@ -43,6 +43,7 @@
         "symfony/psr-http-message-bridge": ">=2.3.1"
     },
     "require-dev": {
+        "laravel/pint": "^1.24",
         "orchestra/testbench": "^8.20|^9.0|^10.0",
         "pestphp/pest": "^2.30|^3.7",
         "pestphp/pest-plugin-laravel": "^2|^3.1"
@@ -73,7 +74,8 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/pest",
-        "test-coverage": "vendor/bin/pest --coverage-html coverage"
+        "format": "@php ./vendor/bin/pint",
+        "test": "@php ./vendor/bin/pest",
+        "test-coverage": "@php ./vendor/bin/pest --coverage-html coverage"
     }
 }
