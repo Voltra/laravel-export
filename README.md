@@ -1,7 +1,7 @@
 # Create a static site bundle from a Laravel app
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-export.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-export)
-[![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-export.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-export)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/voltra/laravel-export.svg?style=flat-square)](https://packagist.org/packages/voltra/laravel-export)
+[![Total Downloads](https://img.shields.io/packagist/dt/oltra/laravel-export.svg?style=flat-square)](https://packagist.org/packages/voltra/laravel-export)
 
 ```
 $ php artisan export
@@ -19,20 +19,26 @@ A few example use cases for this package:
 
 - Use something like [Nova](https://nova.laravel.com/), [Wink](https://github.com/themsaid/wink), [Filament](https://filamentphp.com/), [Sharp](https://sharp.code16.fr/), or any other admin panel to manage your site locally or on a remote server, then publish it to a service like Netlify. This gives you all benefits of a static site (speed, simple hosting, scalability) while still having a dynamic backend of some sort.
 
-## Support us
+## Why a fork?
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-export.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-export)
+> I don't want to maintain this complexity in our package
 
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
+This is an answer I received to a PR that fixed symlink detection on Windows but also on all other OS. Without that PR, directories like the one symlinked via `php artisan storage:link` were not properly exported.
 
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+If you don't count comments and unit tests, the PR was a 10 lines edit (including proper indentation and multiline function calls).
+
+As such `voltra/laravel-export` can be treated as a community-driven fork of `spatie/laravel-export` that won't shy away from bugfixes.
+
+It's even treated as a replacement for that package on a composer level. That means that if you use other packages that depend on `spatie/laravel-export` and you then choose to require `voltra/laravel-export`, then that's what every package will be using.
+
+Such a fork will also allow to slightly diverge from upstream to allow nice QoL features like on-export base URL replacement (WIP).
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require spatie/laravel-export
+composer require voltra/laravel-export
 ```
 
 After the package is installed, you can optionally publish the config file.
@@ -206,24 +212,14 @@ composer test
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
-## Contributing
-
-Please see [CONTRIBUTING](https://github.com/spatie/.github/blob/main/CONTRIBUTING.md) for details.
-
 ## Security
 
-If you've found a bug regarding security please mail [security@spatie.be](mailto:security@spatie.be) instead of using the issue tracker.
+If you've found a bug regarding security please mail [dev@ludwig-guerin.fr](mailto:dev@ludwig-guerin.fr) instead of using the issue tracker.
 
-## Postcardware
-
-You're free to use this package, but if it makes it to your production environment we highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using.
-
-Our address is: Spatie, Kruikstraat 22, 2018 Antwerp, Belgium.
-
-We publish all received postcards [on our company website](https://spatie.be/en/opensource/postcards).
 
 ## Credits
 
+- [Voltra](https://github.com/Voltra)
 - [Sebastian De Deyne](https://github.com/sebastiandedeyne)
 - [All Contributors](../../contributors)
 
