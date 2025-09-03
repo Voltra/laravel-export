@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Spatie\Export\Crawler;
 
 use GuzzleHttp\Client;
@@ -16,8 +18,7 @@ class LocalClient extends Client
     /** @var \Illuminate\Contracts\Http\Kernel */
     protected $kernel;
 
-    /** @var \Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory */
-    protected $psrHttpFactory;
+    protected \Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory $psrHttpFactory;
 
     public function __construct()
     {

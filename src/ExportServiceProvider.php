@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Spatie\Export;
 
 use Illuminate\Contracts\Filesystem\Filesystem;
@@ -14,9 +16,7 @@ class ExportServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/export.php', 'export');
 
-        $this->app->singleton(Destination::class, function () {
-            return new FilesystemDestination($this->getDisk());
-        });
+        $this->app->singleton(\Spatie\Export\Destination::class, fn (): \Spatie\Export\Destination => new FilesystemDestination($this->getDisk()));
 
         $this->app->singleton(Exporter::class);
     }

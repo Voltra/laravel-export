@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Spatie\Export\Jobs;
 
 use Illuminate\Contracts\Routing\UrlGenerator;

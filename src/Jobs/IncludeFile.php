@@ -1,29 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Spatie\Export\Jobs;
 
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use RuntimeException;
 use Spatie\Export\Destination;
 
 class IncludeFile
 {
-    /** @var string */
-    protected $source;
-
-    /** @var string */
-    protected $target;
-
-    /** @var string[] */
-    protected $excludeFilePatterns;
-
-    public function __construct(string $source, string $target, array $excludeFilePatterns)
-    {
-        $this->source = $source;
-        $this->target = $target;
-        $this->excludeFilePatterns = $excludeFilePatterns;
-    }
+    public function __construct(
+        protected string $source,
+        protected string $target,
+        /** @var string[] */
+        protected array $excludeFilePatterns
+    ) {}
 
     public function handle(Destination $destination)
     {
@@ -32,7 +22,7 @@ class IncludeFile
         } elseif (is_dir($this->source)) {
             $this->exportIncludedDirectory($this->source, $this->target, $destination);
         } else {
-            throw new RuntimeException("File or directory [{$this->source}] not found");
+            throw new \RuntimeException("File or directory [{$this->source}] not found");
         }
     }
 
@@ -49,15 +39,15 @@ class IncludeFile
 
     protected function exportIncludedDirectory(string $source, string $target, Destination $destination)
     {
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::SELF_FIRST
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::SELF_FIRST
         );
 
         foreach ($iterator as $item) {
             // No checking for isLink() would result in the contents of symlink'd directories
             // to not be exported on UNIX machines, and the symlink itself to be excluded.
-            if ($item->isDir() && !$item->isLink()) {
+            if ($item->isDir() && ! $item->isLink()) {
                 continue;
             }
 
@@ -78,6 +68,7 @@ class IncludeFile
                     $target.'/'.$iterator->getSubPathName(),
                     $destination
                 );
+
                 continue;
             }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Spatie\Export\Traits;
 
 use Illuminate\Support\Str;
@@ -11,17 +13,17 @@ trait NormalizedPath
         // Sanitize path for filesystem compatibility
         $path = $this->sanitizePathForFilesystem($path);
 
-        if (! Str::contains(basename($path), '.')) {
+        if (! Str::contains(basename((string) $path), '.')) {
             $path .= '/index.html';
         }
 
-        return ltrim($path, '/');
+        return ltrim((string) $path, '/');
     }
 
     protected function sanitizePathForFilesystem(string $path): string
     {
         // If there's a query string, convert it into a subdirectory
-        if (strpos($path, '?') !== false) {
+        if (str_contains($path, '?')) {
             $parts = explode('?', $path, 2);
             $basePath = $parts[0];
             $query = $parts[1];
