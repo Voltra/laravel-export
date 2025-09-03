@@ -11,6 +11,17 @@ return [
     'crawl' => true,
 
     /*
+     * Change the base URL that will be used on export.
+     * Unless you specify one, the exporter will not do any replacement
+     *
+     * @type ?string
+     * @default null
+     *
+     * For example "https://my.website.com/my-prefix"
+     */
+    'baseUrl' => env('EXPORT_BASE_URL', null),
+
+    /*
      * Add additional paths to be added to the export here. If you're using the
      * `crawl` option, you probably don't need to add anything here.
      *
