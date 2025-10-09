@@ -27,7 +27,13 @@ class Exporter
     /** @var string[] */
     protected $excludeFilePatterns = [];
 
-    public function __construct(protected \Illuminate\Contracts\Bus\Dispatcher $dispatcher, protected \Illuminate\Contracts\Routing\UrlGenerator $urlGenerator) {}
+    protected ?string $baseUrl = null;
+
+    public function __construct(
+        protected \Illuminate\Contracts\Bus\Dispatcher $dispatcher,
+        protected \Illuminate\Contracts\Routing\UrlGenerator $urlGenerator,
+    ) {
+    }
 
     public function cleanBeforeExport(bool $cleanBeforeExport): self
     {
@@ -43,6 +49,17 @@ class Exporter
         return $this;
     }
 
+    public function urls(...$urls): self
+    {
+        $urls = is_array($urls[0]) ? $urls[0] : $urls;
+
+        $this->paths(
+            array_map(fn(string $url): string => Str::replaceFirst($this->urlGenerator->to('/'), '', $url), $urls),
+        );
+
+        return $this;
+    }
+
     public function paths(...$paths): self
     {
         $paths = is_array($paths[0]) ? $paths[0] : $paths;
@@ -52,17 +69,8 @@ class Exporter
         return $this;
     }
 
-    public function urls(...$urls): self
-    {
-        $urls = is_array($urls[0]) ? $urls[0] : $urls;
-
-        $this->paths(array_map(fn (string $url): string => Str::replaceFirst($this->urlGenerator->to('/'), '', $url), $urls));
-
-        return $this;
-    }
-
     /**
-     * @param  array<string, string>  $includeFiles
+     * @param array<string, string> $includeFiles
      */
     public function includeFiles(array $includeFiles): self
     {
@@ -78,29 +86,35 @@ class Exporter
         return $this;
     }
 
+    public function baseUrl(?string $baseUrl): self
+    {
+        $this->baseUrl = $baseUrl;
+        return $this;
+    }
+
     public function export()
     {
         if ($this->cleanBeforeExport) {
             $this->dispatcher->dispatchNow(
-                new CleanDestination
+                new CleanDestination(),
             );
         }
 
         if ($this->crawl) {
             $this->dispatcher->dispatchNow(
-                new CrawlSite
+                new CrawlSite(),
             );
         }
 
         foreach ($this->paths as $path) {
             $this->dispatcher->dispatchNow(
-                new ExportPath($path)
+                new ExportPath($path),
             );
         }
 
         foreach ($this->includeFiles as $source => $target) {
             $this->dispatcher->dispatchNow(
-                new IncludeFile($source, $target, $this->excludeFilePatterns)
+                new IncludeFile($source, $target, $this->excludeFilePatterns),
             );
         }
     }

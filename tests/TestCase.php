@@ -23,5 +23,8 @@ class TestCase extends BaseTestCase
 
         $app['config']->set('export.disk', 'export');
         $app['config']->set('export.include_files', []);
+
+        // any random key is fine
+        $app['config']->set('app.key', 'base64:XkrFWC+TGnySY2LsldPXAxuHpyjh8UuoPMt6yy2gJ8U=');
     }
 }

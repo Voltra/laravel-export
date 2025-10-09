@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Spatie\Export\Jobs;
 
-use Illuminate\Contracts\Http\Kernel;
-use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Http\Request;
+use Spatie\Export\Constants;
 use Illuminate\Http\Response;
 use Spatie\Export\Destination;
+use Illuminate\Contracts\Http\Kernel;
 use Spatie\Export\Traits\NormalizedPath;
+use Illuminate\Contracts\Routing\UrlGenerator;
+use Spatie\Export\Http\Middleware\ExportBaseUrlRewriteMiddleware;
 
 class ExportPath
 {
@@ -21,7 +23,11 @@ class ExportPath
     {
         $localRequest = Request::create($urlGenerator->to($this->path));
 
-        $localRequest->headers->set('X-Laravel-Export', 'true');
+        $localRequest->headers->set(Constants::EXPORT_HEADER, 'true');
+
+        $kernel->bootstrap();
+
+        $kernel->getApplication()->get('router')->prependMiddlewareToGroup('web', ExportBaseUrlRewriteMiddleware::class);
 
         /**
          * @var Response $response
