@@ -57,9 +57,8 @@ class ExportBaseUrlRewriteMiddleware
             ),
         );
 
-        /**
-         * Ensured to not be empty by the preconditions
-         */
+
+        // Ensured to not be empty by the preconditions
         $baseUrl = $this->sanitizeBaseUrl(config('export.base_url'));
 
         $uri = Uri::of($baseUrl);
