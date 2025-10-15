@@ -18,8 +18,8 @@ class ExportBaseUrlRewriteMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if ($this->shouldProcess($request)) {
-            [$originalRoot, $updatedRequest] = $this->process($request);
-            $response = $next($updatedRequest);
+            $originalRoot = $this->process($request);
+            $response = $next($request);
             URL::useOrigin($originalRoot);
             return $response;
         }
@@ -35,7 +35,7 @@ class ExportBaseUrlRewriteMiddleware
             return false;
         }
 
-        if (empty(config('export.base_url'))) {
+        if (!filled(config('export.base_url'))) {
             // If no base URL was given for us to rewrite to
             // then there's no points in processing the request
             return false;
@@ -46,9 +46,9 @@ class ExportBaseUrlRewriteMiddleware
 
     /**
      * @precondition !empty(config('export.base_url'))
-     * @returns [string, Request] - The original root url, the updated request
+     * @returns string The original root url
      */
-    private function process(Request $request): array
+    private function process(Request $request): string
     {
         $originalRootUrl = $this->sanitizeBaseUrl(
             URL::formatRoot(
@@ -70,7 +70,7 @@ class ExportBaseUrlRewriteMiddleware
         app()->instance('request', $updatedRequest);
         Facade::clearResolvedInstance('request');
 
-        return [$originalRootUrl, $updatedRequest];
+        return $originalRootUrl;
     }
 
     private function sanitizeBaseUrl(string $baseUrl): string

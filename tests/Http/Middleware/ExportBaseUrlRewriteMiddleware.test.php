@@ -14,18 +14,13 @@ describe(ExportBaseUrlRewriteMiddleware::class, function () {
         return dirname(__DIR__, levels: 2).DIRECTORY_SEPARATOR.$uri;
     };
 
-    beforeEach(function () {
-        artisan('cache:clear');
-    });
-
     it('properly rewrites URLs on export', function () use ($testRoot) {
         config()->set('export.base_url', 'https://www.test.org/a-ok');
         Route::get('/test', fn () => Blade::render('{{ url("/ok") }}'))->middleware('web');
         $expected = 'https://www.test.org/a-ok/ok';
 
-        //TODO: Fix HTTPS rewrite when running on HTTP only
-
-        app(Exporter::class)
+        resolve(Exporter::class)
+            ->cleanBeforeExport(true)
             ->crawl(false)
             ->paths(['/test'])
             ->export();
@@ -35,5 +30,27 @@ describe(ExportBaseUrlRewriteMiddleware::class, function () {
 
         $content = file_get_contents($resultFile);
         expect($content)->toEqual($expected);
+    });
+
+    it('properly rewires URL requests to their local equivalent on crawl', function () use($testRoot) {
+        config()->set('export.base_url', 'https://www.test.org/b-ok');
+
+        Route::get('/', fn () => Blade::render('<a href="{{ url("/ok") }}">Test</a>'))->middleware('web');
+        Route::get('/ok', fn () => Blade::render('<p>SUCCESS</p>'))->middleware('web');
+
+        resolve(Exporter::class)
+            ->cleanBeforeExport(true)
+            ->crawl(true)
+            ->export();
+
+        $resultFile = $testRoot('dist/index.html');
+        expect(file_exists($resultFile))->toBeTrue();
+        $content = file_get_contents($resultFile);
+        expect($content)->toEqual('<a href="https://www.test.org/b-ok/ok">Test</a>');
+
+        $okFile = $testRoot('dist/ok/index.html');
+        expect(file_exists($okFile))->toBeTrue();
+        $content = file_get_contents($okFile);
+        expect($content)->toEqual('<p>SUCCESS</p>');
     });
 });

@@ -12,6 +12,7 @@ use Illuminate\Contracts\Http\Kernel;
 use Spatie\Export\Traits\NormalizedPath;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Spatie\Export\Http\Middleware\ExportBaseUrlRewriteMiddleware;
+use Spatie\Export\Utils;
 
 class ExportPath
 {
@@ -21,13 +22,13 @@ class ExportPath
 
     public function handle(Kernel $kernel, Destination $destination, UrlGenerator $urlGenerator)
     {
+        $kernel = app()->get(Kernel::class);;
+
         $localRequest = Request::create($urlGenerator->to($this->path));
 
         $localRequest->headers->set(Constants::EXPORT_HEADER, 'true');
 
-        $kernel->bootstrap();
-
-        $kernel->getApplication()->get('router')->prependMiddlewareToGroup('web', ExportBaseUrlRewriteMiddleware::class);
+        Utils::configureExportKernel($kernel);
 
         /**
          * @var Response $response

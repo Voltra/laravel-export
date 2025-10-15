@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Spatie\Export\Jobs;
 
-use Illuminate\Contracts\Routing\UrlGenerator;
-use Spatie\Crawler\Crawler;
-use Spatie\Crawler\CrawlProfiles\CrawlInternalUrls;
-use Spatie\Export\Crawler\LocalClient;
-use Spatie\Export\Crawler\Observer;
 use Spatie\Export\Destination;
+use Spatie\Export\Crawler\Crawler;
+use Spatie\Export\Crawler\Observer;
+use Spatie\Export\Crawler\LocalClient;
+use Illuminate\Contracts\Routing\UrlGenerator;
+use Spatie\Export\Crawler\CrawlProfiles\CrawlInternalUrls;
 
 class CrawlSite
 {
@@ -17,9 +17,13 @@ class CrawlSite
     {
         $entry = $urlGenerator->to('/');
 
-        (new Crawler(new LocalClient))
+        $crawler = new Crawler(new LocalClient);
+
+        $crawler
             ->setCrawlObserver(new Observer($entry, $destination))
-            ->setCrawlProfile(new CrawlInternalUrls($entry))
-            ->startCrawling($entry);
+            ->setCrawlProfile(new CrawlInternalUrls($entry));
+
+
+        $crawler->startCrawling($entry);
     }
 }
