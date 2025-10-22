@@ -32,8 +32,7 @@ class Exporter
     public function __construct(
         protected \Illuminate\Contracts\Bus\Dispatcher $dispatcher,
         protected \Illuminate\Contracts\Routing\UrlGenerator $urlGenerator,
-    ) {
-    }
+    ) {}
 
     public function cleanBeforeExport(bool $cleanBeforeExport): self
     {
@@ -54,7 +53,7 @@ class Exporter
         $urls = is_array($urls[0]) ? $urls[0] : $urls;
 
         $this->paths(
-            array_map(fn(string $url): string => Str::replaceFirst($this->urlGenerator->to('/'), '', $url), $urls),
+            array_map(fn (string $url): string => Str::replaceFirst($this->urlGenerator->to('/'), '', $url), $urls),
         );
 
         return $this;
@@ -70,7 +69,7 @@ class Exporter
     }
 
     /**
-     * @param array<string, string> $includeFiles
+     * @param  array<string, string>  $includeFiles
      */
     public function includeFiles(array $includeFiles): self
     {
@@ -89,6 +88,7 @@ class Exporter
     public function baseUrl(?string $baseUrl): self
     {
         $this->baseUrl = $baseUrl;
+
         return $this;
     }
 
@@ -96,13 +96,13 @@ class Exporter
     {
         if ($this->cleanBeforeExport) {
             $this->dispatcher->dispatchNow(
-                new CleanDestination(),
+                new CleanDestination,
             );
         }
 
         if ($this->crawl) {
             $this->dispatcher->dispatchNow(
-                new CrawlSite(),
+                new CrawlSite,
             );
         }
 

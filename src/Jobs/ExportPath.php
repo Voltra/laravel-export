@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Spatie\Export\Jobs;
 
-use Illuminate\Http\Request;
-use Spatie\Export\Constants;
-use Illuminate\Http\Response;
-use Spatie\Export\Destination;
 use Illuminate\Contracts\Http\Kernel;
-use Spatie\Export\Traits\NormalizedPath;
 use Illuminate\Contracts\Routing\UrlGenerator;
-use Spatie\Export\Http\Middleware\ExportBaseUrlRewriteMiddleware;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Spatie\Export\Constants;
+use Spatie\Export\Destination;
+use Spatie\Export\Traits\NormalizedPath;
 use Spatie\Export\Utils;
 
 class ExportPath
@@ -22,7 +21,7 @@ class ExportPath
 
     public function handle(Kernel $kernel, Destination $destination, UrlGenerator $urlGenerator)
     {
-        $kernel = app()->get(Kernel::class);;
+        $kernel = app()->get(Kernel::class);
 
         $localRequest = Request::create($urlGenerator->to($this->path));
 

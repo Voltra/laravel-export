@@ -1,16 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Spatie\Export\Crawler;
 
-use Generator;
-use GuzzleHttp\Psr7\Uri;
-use Spatie\Export\Utils;
-use Illuminate\Support\Str;
 use GuzzleHttp\Psr7\Request;
-use Spatie\Crawler\Crawler as SpatieCrawler;
+use GuzzleHttp\Psr7\Uri;
 use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Support\Str;
 use Psr\Http\Message\UriInterface;
+use Spatie\Crawler\Crawler as SpatieCrawler;
 use Spatie\Crawler\CrawlUrl;
+use Spatie\Export\Utils;
 use Tree\Node\Node;
 
 class Crawler extends SpatieCrawler
@@ -44,7 +45,7 @@ class Crawler extends SpatieCrawler
     /**
      * @see \Spatie\Crawler\Crawler::getCrawlRequests()
      */
-    protected function getCrawlRequests(): Generator
+    protected function getCrawlRequests(): \Generator
     {
         // $urlGen = resolve(UrlGenerator::class);
 
@@ -76,7 +77,8 @@ class Crawler extends SpatieCrawler
         }
     }
 
-    protected function reverseRewriteUrl(Uri $uri) {
+    protected function reverseRewriteUrl(Uri $uri)
+    {
         if (Utils::rewritesUrlsOnExport()) {
             // We want to revert back the rewritten URL to a local URL
             // when crawling because we make request to those page.
@@ -86,8 +88,7 @@ class Crawler extends SpatieCrawler
             // system in place
             $exportRoot = Utils::rewriteUriRoot();
 
-
-            if (Str::startsWith($uri, $exportRoot)){
+            if (Str::startsWith($uri, $exportRoot)) {
                 $appRoot = Utils::cleanUri($this->getBaseUrl());
                 $asInternalUrl = str($uri)
                     ->replaceFirst($exportRoot, $appRoot)

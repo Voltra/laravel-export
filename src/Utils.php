@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Spatie\Export;
 
 use GuzzleHttp\Psr7\Uri;
@@ -8,7 +10,8 @@ use Spatie\Export\Http\Middleware\ExportBaseUrlRewriteMiddleware;
 
 abstract class Utils
 {
-    public static function configureExportKernel(Kernel $kernel) {
+    public static function configureExportKernel(Kernel $kernel)
+    {
         $kernel->bootstrap();
 
         $kernel->getApplication()
@@ -16,15 +19,18 @@ abstract class Utils
             ->prependMiddlewareToGroup('web', ExportBaseUrlRewriteMiddleware::class);
     }
 
-    public static function rewritesUrlsOnExport(): bool {
+    public static function rewritesUrlsOnExport(): bool
+    {
         return filled(config('export.base_url'));
     }
 
-    public static function rewriteUriRoot(): Uri {
+    public static function rewriteUriRoot(): Uri
+    {
         return self::cleanUri(new Uri(config('export.base_url', '')));
     }
 
-    public static function cleanUri(Uri $uri): Uri {
+    public static function cleanUri(Uri $uri): Uri
+    {
         return $uri->withHost(
             rtrim($uri->getHost(), '/')
         );

@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Spatie\Export\Crawler;
 
 use GuzzleHttp\Client;
-use Illuminate\Http\Request;
-use Nyholm\Psr7\Factory\Psr17Factory;
-use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
 use Illuminate\Contracts\Http\Kernel as HttpKernel;
-use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
-use Spatie\Export\Http\Middleware\ExportBaseUrlRewriteMiddleware;
+use Illuminate\Http\Request;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Psr\Http\Message\RequestInterface;
+use Spatie\Export\Constants;
 use Spatie\Export\Utils;
+use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 
 class LocalClient extends Client
 {
@@ -39,7 +39,7 @@ class LocalClient extends Client
 
         $localRequest = Request::create((string) $request->getUri());
 
-        $localRequest->headers->set('X-Laravel-Export', 'true');
+        $localRequest->headers->set(Constants::EXPORT_HEADER, 'true');
 
         $response = $this->kernel->handle($localRequest);
 
