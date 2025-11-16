@@ -41,7 +41,7 @@ The `voltra/laravel-export` version range on the right can replace the version r
 
 | spatie/laravel-export | voltra/laravel-export |
 |:---------------------:|:---------------------:|
-|     ^1.0 <=1.2.1      |         ^1.0          |
+|     ^1.0 <=1.2.1      |         ^1.0 <= 1.2.3         |
 
 ## Installation
 
