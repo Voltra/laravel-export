@@ -8,8 +8,10 @@ use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Spatie\Export\Constants;
 use Spatie\Export\Destination;
 use Spatie\Export\Traits\NormalizedPath;
+use Spatie\Export\Utils;
 
 class ExportPath
 {
@@ -19,9 +21,13 @@ class ExportPath
 
     public function handle(Kernel $kernel, Destination $destination, UrlGenerator $urlGenerator)
     {
+        $kernel = app()->get(Kernel::class);
+
         $localRequest = Request::create($urlGenerator->to($this->path));
 
-        $localRequest->headers->set('X-Laravel-Export', 'true');
+        $localRequest->headers->set(Constants::EXPORT_HEADER, 'true');
+
+        Utils::configureExportKernel($kernel);
 
         /**
          * @var Response $response

@@ -61,6 +61,11 @@ return [
 ];
 ```
 
+```dotenv
+# Optional, if the env variable is not defined it'll not do any replacement
+EXPORT_BASE_URL="https://my.base-url.com/prefix"
+```
+
 This means you can also use other filesystem drivers, so you could export your site straight to something like S3.
 
 ### Determining the export contents

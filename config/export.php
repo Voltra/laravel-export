@@ -3,12 +3,22 @@
 declare(strict_types=1);
 
 return [
-
     /*
      * If true, the exporter will crawl through your site's pages to determine
      * the paths that need to be exported.
      */
     'crawl' => true,
+
+    /*
+     * Change the base URL that will be used on export.
+     * Unless you specify one, the exporter will not do any replacement
+     *
+     * @type ?string
+     * @default null
+     *
+     * For example "https://my.website.com/my-prefix"
+     */
+    'base_url' => env('EXPORT_BASE_URL', null),
 
     /*
      * Add additional paths to be added to the export here. If you're using the
