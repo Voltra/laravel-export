@@ -1,0 +1,23 @@
+{
+    "private": true,
+    "name": "vite-laravel-export-plugin",
+    "version": "1.2.2",
+    "description": "![voltra/laravel-export](https://raw.githubusercontent.com/Voltra/laravel-export/main/art/voltra__laravel_export.png)",
+    "main": "resources/js/vite-laravel-export-plugin.js",
+    "types": "resources/js/vite-laravel-export-plugin.d.ts",
+    "scripts": {},
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Voltra/laravel-export.git"
+    },
+    "keywords": [],
+    "author": "Voltra <dev@ludwig-guerin.fr>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Voltra/laravel-export/issues"
+    },
+    "homepage": "https://github.com/Voltra/laravel-export#readme",
+    "devDependencies": {
+        "vite": "^6.4.1"
+    }
+}

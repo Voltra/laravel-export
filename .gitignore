@@ -6,6 +6,7 @@ reports/
 _ide_helper.php
 _ide_helper_models.php
 .phpstorm.meta.php
+package-lock.json
 
 ####
 
