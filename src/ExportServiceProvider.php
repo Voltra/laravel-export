@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Export\Console\ExportCommand;
 use Spatie\Export\Destinations\FilesystemDestination;
+use Spatie\Export\Http\Middleware\ExportBaseUrlRewriteMiddleware;
 
 class ExportServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,8 @@ class ExportServiceProvider extends ServiceProvider
         $this->app->singleton(\Spatie\Export\Destination::class, fn (): \Spatie\Export\Destination => new FilesystemDestination($this->getDisk()));
 
         $this->app->singleton(Exporter::class);
+
+        $this->app->scoped(ExportBaseUrlRewriteMiddleware::class);
     }
 
     public function boot(): void
@@ -33,12 +36,13 @@ class ExportServiceProvider extends ServiceProvider
             ]);
         }
 
-        $this->app->make(Exporter::class)
+        $this->app->get(Exporter::class)
             ->cleanBeforeExport(config('export.clean_before_export', false))
             ->crawl(config('export.crawl', false))
             ->paths(config('export.paths', []))
             ->includeFiles(config('export.include_files', []))
-            ->excludeFilePatterns(config('export.exclude_file_patterns', []));
+            ->excludeFilePatterns(config('export.exclude_file_patterns', []))
+            ->baseUrl(config('export.base_url'));
     }
 
     protected function getDisk(): Filesystem

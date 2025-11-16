@@ -35,6 +35,14 @@ It's even treated as a replacement for that package on a composer level. That me
 
 Such a fork will also allow to slightly diverge from upstream to allow nice QoL features like on-export base URL replacement (WIP).
 
+## Compatibility
+
+The `voltra/laravel-export` version range on the right can replace the version range of `spatie/laravel-export` on the left.
+
+| spatie/laravel-export | voltra/laravel-export |
+|:---------------------:|:---------------------:|
+|     ^1.0 <=1.2.1      |         ^1.0 <= 1.2.3         |
+
 ## Installation
 
 You can install the package via composer:
@@ -59,6 +67,11 @@ Laravel Export doesn't require configuration to get started, but there are a few
 return [
     'disk' => 'export',
 ];
+```
+
+```dotenv
+# Optional, if the env variable is not defined it'll not do any replacement
+EXPORT_BASE_URL="https://my.base-url.com/prefix"
 ```
 
 This means you can also use other filesystem drivers, so you could export your site straight to something like S3.
@@ -217,7 +230,6 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 ## Security
 
 If you've found a bug regarding security please mail [dev@ludwig-guerin.fr](mailto:dev@ludwig-guerin.fr) instead of using the issue tracker.
-
 
 ## Credits
 

@@ -11,6 +11,8 @@ use Illuminate\Contracts\Http\Kernel as HttpKernel;
 use Illuminate\Http\Request;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\RequestInterface;
+use Spatie\Export\Constants;
+use Spatie\Export\Utils;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 
 class LocalClient extends Client
@@ -24,7 +26,7 @@ class LocalClient extends Client
     {
         parent::__construct();
 
-        $this->kernel = app(HttpKernel::class);
+        $this->kernel = app()->get(HttpKernel::class);
 
         $psr17Factory = new Psr17Factory;
 
@@ -33,9 +35,11 @@ class LocalClient extends Client
 
     public function sendAsync(RequestInterface $request, array $options = []): PromiseInterface
     {
+        Utils::configureExportKernel($this->kernel);
+
         $localRequest = Request::create((string) $request->getUri());
 
-        $localRequest->headers->set('X-Laravel-Export', 'true');
+        $localRequest->headers->set(Constants::EXPORT_HEADER, 'true');
 
         $response = $this->kernel->handle($localRequest);
 
