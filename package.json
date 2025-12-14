@@ -1,7 +1,7 @@
 {
     "private": true,
     "name": "vite-laravel-export-plugin",
-    "version": "1.2.3",
+    "version": "1.2.4",
     "description": "![voltra/laravel-export](https://raw.githubusercontent.com/Voltra/laravel-export/main/art/voltra__laravel_export.png)",
     "main": "resources/js/vite-laravel-export-plugin.js",
     "types": "resources/js/vite-laravel-export-plugin.d.ts",
