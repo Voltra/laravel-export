@@ -69,12 +69,42 @@ return [
 ];
 ```
 
+This means you can also use other filesystem drivers, so you could export your site straight to something like S3.
+
 ```dotenv
 # Optional, if the env variable is not defined it'll not do any replacement
 EXPORT_BASE_URL="https://my.base-url.com/prefix"
 ```
 
-This means you can also use other filesystem drivers, so you could export your site straight to something like S3.
+### (optional) Vite plugin
+
+If you heavily use JS in your app, you might want to register the included vite plugin to properly handle rewrites and absolute URLs in your app:
+
+```javascript
+// vite.config.js
+// [...]
+import laravelExport from "./vendor/voltra/laravel-export/resources/js/vite-laravel-export-plugin";
+// [...]
+
+export default defineConfig({
+    // [...]
+    laravel({
+        // [...]
+    }),
+    laravelExport(),
+    // [...]
+})
+```
+
+Then you can resolve URLs in your app using the helper function:
+
+```javascript
+import { asExportUrl } from "/my/path/to/vendor/laravel-export/resources/js/vite-laravel-export-plugin"
+
+const url = asExportUrl("/test"); // URL object
+console.log(url);
+console.log(url.toString());
+```
 
 ### Determining the export contents
 
