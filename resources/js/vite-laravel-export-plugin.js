@@ -1,5 +1,3 @@
-import { URL } from "node:url";
-
 /**
  * Map an app URL to its exported app URL
  * @param {URL|string} url - The URL to map
@@ -9,7 +7,7 @@ export const asExportUrl = url => {
     const urlStr = url instanceof URL ? url.toString() : url;
 
     if (!import.meta.env?.EXPORT_BASE_URL) {
-        return url instanceof URL ? url : new URL(url);
+        return url instanceof URL ? url : new URL(url, location.href);
     }
 
     /**
@@ -29,7 +27,10 @@ export const asExportUrl = url => {
 
 
 /**
+ * vite-laravel-export-plugin
  * @type {(exportRootUri?: string) => import("vite").Plugin}
+ * @param {string|undefined} [exportRootUri] - The export root URI to use (defaults to your `process.env.EXPORT_BASE_URL`)
+ * @returns {import("vite").Plugin}
  */
 export const plugin = (exportBaseRootUri = process.env.EXPORT_BASE_URL) => ({
     name: "laravel-export",
@@ -41,6 +42,8 @@ export const plugin = (exportBaseRootUri = process.env.EXPORT_BASE_URL) => ({
             if (env.isSsrTargetWebworker) {
                 return;
             }
+
+            config.define ??= {};
 
             // If we have a non empty `exportBaseRootUri`, then we stringify that
             // otherwise we want null-checks to be valid as well as empty checks,

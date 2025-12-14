@@ -81,4 +81,11 @@ return [
         // 'deploy' => '/usr/local/bin/netlify deploy --prod',
     ],
 
+    /*
+     * Timeout for processes ran in the export process
+     * @type ?int
+     * NB: set to null to disable the timeout
+     */
+    'timeout' => 60,
+
 ];

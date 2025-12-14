@@ -38,6 +38,10 @@ class ExportCommand extends Command
         $this->addOption('skip-all', null, InputOption::VALUE_NONE, 'Skip all hooks');
         $this->addOption('skip-before', null, InputOption::VALUE_NONE, 'Skip all before hooks');
         $this->addOption('skip-after', null, InputOption::VALUE_NONE, 'Skip all after hooks');
+        $this->addOption('timeout', null, InputOption::VALUE_OPTIONAL, 'The timeout for the processes run during the export', 60, [
+            60,
+            null,
+        ]);
     }
 
     public function handle(Exporter $exporter)
@@ -95,13 +99,19 @@ class ExportCommand extends Command
 
     protected function runHooks(Collection $hooks)
     {
+        $timeout = $this->input->getOption('timeout') ?? config('export.timeout', 60);
+
+        if (!is_int($timeout) && $timeout !== null) {
+            $timeout = 60;
+        }
+
         foreach ($hooks as $name => $command) {
             $this->comment("[{$name}]", 'v');
 
             if (method_exists(Process::class, 'fromShellCommandline')) {
-                $process = Process::fromShellCommandline($command);
+                $process = Process::fromShellCommandline($command, null, null, null, $timeout);
             } else {
-                $process = new Process($command);
+                $process = new Process($command, null, null, null, $timeout);
             }
 
             $process->mustRun();
