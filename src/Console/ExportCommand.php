@@ -106,7 +106,7 @@ class ExportCommand extends Command
             $timeout = Utils::getConfigTimeout();
         }
 
-        if (!is_int($timeout) && $timeout !== null) {
+        if (! is_int($timeout) && $timeout !== null) {
             $timeout = Utils::DEFAULT_TIMEOUT;
         }
 
