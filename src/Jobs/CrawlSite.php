@@ -10,6 +10,7 @@ use Spatie\Export\Crawler\CrawlProfiles\CrawlInternalUrls;
 use Spatie\Export\Crawler\LocalClient;
 use Spatie\Export\Crawler\Observer;
 use Spatie\Export\Destination;
+use Spatie\Export\Utils;
 
 class CrawlSite
 {
@@ -18,7 +19,6 @@ class CrawlSite
         $entry = $urlGenerator->to('/');
 
         $crawler = new Crawler(new LocalClient);
-
         $crawler
             ->setCrawlObserver(new Observer($entry, $destination))
             ->setCrawlProfile(new CrawlInternalUrls($entry));

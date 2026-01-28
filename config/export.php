@@ -87,5 +87,4 @@ return [
      * NB: set to null to disable the timeout
      */
     'timeout' => 60,
-
 ];
