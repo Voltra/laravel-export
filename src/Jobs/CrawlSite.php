@@ -10,7 +10,6 @@ use Spatie\Export\Crawler\CrawlProfiles\CrawlInternalUrls;
 use Spatie\Export\Crawler\LocalClient;
 use Spatie\Export\Crawler\Observer;
 use Spatie\Export\Destination;
-use Spatie\Export\Utils;
 
 class CrawlSite
 {
