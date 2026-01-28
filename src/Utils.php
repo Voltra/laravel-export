@@ -6,6 +6,7 @@ namespace Spatie\Export;
 
 use GuzzleHttp\Psr7\Uri;
 use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Support\Facades\File;
 use Spatie\Export\Http\Middleware\ExportBaseUrlRewriteMiddleware;
 
 abstract class Utils
@@ -49,5 +50,10 @@ abstract class Utils
         return $uri->withHost(
             rtrim($uri->getHost(), '/')
         );
+    }
+
+    public static function isAssetFile(string $path): bool
+    {
+        return File::exists(public_path($path));
     }
 }

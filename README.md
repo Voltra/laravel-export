@@ -41,7 +41,7 @@ The `voltra/laravel-export` version range on the right can replace the version r
 
 | spatie/laravel-export | voltra/laravel-export |
 |:---------------------:|:---------------------:|
-|     ^1.0 <=1.2.2      |     ^1.0 <= 1.2.5     |
+|     ^1.0 <=1.2.2      |     ^1.0 <= 1.2.6     |
 
 ## Installation
 
@@ -245,6 +245,22 @@ To build a bundle, run the `export` command:
 
 ```bash
 php artisan export
+```
+
+We recommend adding a composer script to make it handy:
+
+```json
+{
+    "scripts": {
+        "app:export": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php artisan export"
+        ]
+    },
+    "scripts-descriptions": {
+        "app:export": "Export the website as a static site bundle"
+    }
+}
 ```
 
 ## Testing
