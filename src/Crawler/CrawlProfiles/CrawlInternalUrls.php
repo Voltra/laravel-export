@@ -14,26 +14,18 @@ class CrawlInternalUrls extends BaseProfile
     {
         if (Utils::rewritesUrlsOnExport()) {
             $exportUri = Utils::rewriteUriRoot();
-            if (parent::shouldCrawl($url)) {
-                return true;
-            }
-
-            if ($exportUri->getHost() !== $url->getHost()) {
+            if (! parent::shouldCrawl($url)) {
                 return false;
             }
 
-            // Let's say $url = "https://my.website.com/laravel/static/my/route"
-            // and $exportUri = "https://my.website.com/laravel/static"
-            // then the "app relative" path is "/my/route"
-            $path = str($url)->after($exportUri)->toString();
-            // We don't want to crawl on assets
-            if (! Utils::isAssetFile($path)) {
-                return true;
+            if ($exportUri->getHost() !== $url->getHost()) {
+                return ! Utils::isAssetUrl($url);
             }
 
-            return asset($path) === $url->__toString();
+            return ! Utils::isAssetUrl($url, $exportUri);
         }
 
-        return parent::shouldCrawl($url);
+        return (! Utils::isAssetUrl($url))
+            && parent::shouldCrawl($url);
     }
 }

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\Config\RectorConfig;
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector;
 use RectorLaravel\Set\LaravelLevelSetList;
@@ -29,4 +30,7 @@ return RectorConfig::configure()
     ->withComposerBased(laravel: true, phpunit: true)
     ->withSets([
         LaravelLevelSetList::UP_TO_LARAVEL_110,
+    ])
+    ->withSkip([
+        FlipTypeControlToUseExclusiveTypeRector::class,
     ]);

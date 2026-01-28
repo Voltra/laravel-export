@@ -7,20 +7,20 @@ namespace Spatie\Export;
 use GuzzleHttp\Psr7\Uri;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Uri as SupportUri;
 use Spatie\Export\Http\Middleware\ExportBaseUrlRewriteMiddleware;
 
 abstract class Utils
 {
-    public const DEFAULT_TIMEOUT = 60;
-
-    public static function getConfigTimeout(): int
+    public static function getConfigTimeout(): ?int
     {
         // We don't use our default value of 60 right here as it
         // breaks the behavior of process timeouts with null for no timeout
         $timeout = config()->get('export.timeout', null);
 
         if (! is_int($timeout) && $timeout !== null) {
-            return self::DEFAULT_TIMEOUT;
+            return Constants::DEFAULT_TIMEOUT;
         }
 
         return $timeout;
@@ -54,6 +54,39 @@ abstract class Utils
 
     public static function isAssetFile(string $path): bool
     {
-        return File::exists(public_path($path));
+        $fullPath = public_path($path);
+
+        return static::fileExists($fullPath);
+    }
+
+    public static function isAssetUrl(Uri $url, ?Uri $baseUrl = null): bool
+    {
+        if ($baseUrl === null) {
+            $baseUrl = SupportUri::of(URL::formatRoot(
+                $url->getScheme(),
+                $url->getHost(),
+            ));
+        }
+
+        // Let's say $url = "https://my.website.com/laravel/static/my/route"
+        // and baseUrl = "https://my.website.com/laravel/static"
+        // then the "app relative" path is "/my/route"
+        $path = str($url)->after((string) $baseUrl)->toString();
+
+        if (static::isAssetFile($path)) {
+            return true;
+        }
+
+        $assetPath = asset($path);
+
+        return $assetPath === $url->__toString()
+            && static::fileExists($assetPath);
+    }
+
+    protected static function fileExists(string $path)
+    {
+        return File::exists($path)
+        && File::isFile($path)
+        && ! File::isDirectory($path);
     }
 }

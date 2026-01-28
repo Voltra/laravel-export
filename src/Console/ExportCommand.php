@@ -39,7 +39,7 @@ class ExportCommand extends Command
         $this->addOption('skip-all', null, InputOption::VALUE_NONE, 'Skip all hooks');
         $this->addOption('skip-before', null, InputOption::VALUE_NONE, 'Skip all before hooks');
         $this->addOption('skip-after', null, InputOption::VALUE_NONE, 'Skip all after hooks');
-        $this->addOption('timeout', null, InputOption::VALUE_OPTIONAL, 'The timeout for the processes run during the export', 60, [
+        $this->addOption('timeout', null, InputOption::VALUE_OPTIONAL, 'The timeout for the processes run during the export', null, [
             60,
             null,
         ]);
