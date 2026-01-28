@@ -247,6 +247,22 @@ To build a bundle, run the `export` command:
 php artisan export
 ```
 
+We recommend adding a composer script to make it handy:
+
+```json
+{
+    "scripts": {
+        "app:export": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php artisan export"
+        ]
+    },
+    "scripts-descriptions": {
+        "app:export": "Export the website as a static site bundle"
+    }
+}
+```
+
 ## Testing
 
 ``` bash
