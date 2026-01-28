@@ -7,6 +7,7 @@ namespace Spatie\Export\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Spatie\Export\Exporter;
+use Spatie\Export\Utils;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Process\Process;
 
@@ -99,11 +100,17 @@ class ExportCommand extends Command
 
     protected function runHooks(Collection $hooks)
     {
-        $timeout = $this->input->getOption('timeout') ?? config('export.timeout', 60);
+        $timeout = $this->input->getOption('timeout');
 
-        if (!is_int($timeout) && $timeout !== null) {
-            $timeout = 60;
+        if (empty($timeout)) {
+            $timeout = Utils::getConfigTimeout();
         }
+
+        if (! is_int($timeout) && $timeout !== null) {
+            $timeout = Utils::DEFAULT_TIMEOUT;
+        }
+
+        set_time_limit(($timeout ?? 0) * count($hooks));
 
         foreach ($hooks as $name => $command) {
             $this->comment("[{$name}]", 'v');

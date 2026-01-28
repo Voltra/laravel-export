@@ -1,4 +1,11 @@
 /**
+ * Normalizes URLs for use in this package
+ * @param {string} url
+ * @returns {string}
+ */
+const normalizeUrl = url => url.endsWith("/") ? url.slice(0, -1) : url;
+
+/**
  * Map an app URL to its exported app URL
  * @param {URL|string} url - The URL to map
  * @returns {URL}
@@ -13,14 +20,16 @@ export const asExportUrl = url => {
     /**
      * @type {string}
      */
-    const exportBaseUrl = import.meta.env?.EXPORT_BASE_URL;
+    const exportBaseUrl = normalizeUrl(import.meta.env?.EXPORT_BASE_URL);
 
     /**
      * @type {string}
      */
-    const appBaseUrl = import.meta.env.APP_URL;
+    const appBaseUrl = normalizeUrl(import.meta.env.APP_URL);
 
-    const mappedUrlStr = urlStr.replace(appBaseUrl, exportBaseUrl);
+    const mappedUrlStr = urlStr
+        .replace(`${appBaseUrl}/`, `${exportBaseUrl}/`)
+        .replace(appBaseUrl, exportBaseUrl);
 
     return new URL(mappedUrlStr, exportBaseUrl);
 };

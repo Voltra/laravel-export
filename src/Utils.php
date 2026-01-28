@@ -10,6 +10,21 @@ use Spatie\Export\Http\Middleware\ExportBaseUrlRewriteMiddleware;
 
 abstract class Utils
 {
+    public const DEFAULT_TIMEOUT = 60;
+
+    public static function getConfigTimeout(): int
+    {
+        // We don't use our default value of 60 right here as it
+        // breaks the behavior of process timeouts with null for no timeout
+        $timeout = config()->get('export.timeout', null);
+
+        if (! is_int($timeout) && $timeout !== null) {
+            return self::DEFAULT_TIMEOUT;
+        }
+
+        return $timeout;
+    }
+
     public static function configureExportKernel(Kernel $kernel)
     {
         $kernel->bootstrap();
